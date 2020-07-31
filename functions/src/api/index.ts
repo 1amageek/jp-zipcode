@@ -7,9 +7,9 @@ app.get("/v1/address", async (req, res) => {
 	res.set('Cache-Control', 'public, max-age=604800, s-maxage=604800')
 	console.log("[API]", req.query, req.params)
 
-	const { code } = req.query
+	let { code } = req.query
 	if (!code) return res.status(400).send("Invalid request.")
-
+	code = (code as string).replace(/\-/g, "")
 	try {
 		const snapshot = await admin.firestore().collection("zipcode")
 			.where(admin.firestore.FieldPath.documentId(), ">=", code)
