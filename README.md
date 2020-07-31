@@ -1,5 +1,6 @@
 # jp-zipcode
 
+[郵便番号データダウンロード](https://www.post.japanpost.jp/zipcode/download.html)
 
 ## Usage
 
