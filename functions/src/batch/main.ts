@@ -14,7 +14,7 @@ interface Data {
 	town: string | null
 }
 
-export default async (callback: (data: Data) => void) => {
+export default async (callback: (data: Data) => Promise<void>) => {
 	const file = await getZipCodeData(ZIPCODE_FILE_URL)
 	const decoded = iconv.decode(file.data, "shiftjis")
 	return new Promise<void>((resolve, reject) => {
@@ -23,7 +23,7 @@ export default async (callback: (data: Data) => void) => {
 			output: "line"
 		})
 			.fromString(decoded)
-			.subscribe(line => {
+			.subscribe(async line => {
 				if (typeof line !== "string") return
 				const data = line.split(",").map(value => value.replace(/\"/g, ""))
 				const zipcode = data[2]
@@ -33,7 +33,7 @@ export default async (callback: (data: Data) => void) => {
 				const state = data[6]
 				const city = data[7]
 				const town = data[8] === "以下に掲載がない場合" ? null : data[8]
-				callback({
+				await callback({
 					zipcode,
 					state_kana,
 					city_kana,

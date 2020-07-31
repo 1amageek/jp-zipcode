@@ -18,10 +18,12 @@ export const monthlyDataUpdate = functions
 		await main(async data => {
 			addresses.push(data)
 			if (addresses.length === 500) {
+				functions.logger.log("Send data: ", addresses.length)
 				await pubsub.topic("setAddressData").publishJSON({ "data": addresses })
 				addresses = []
 			}
 		})
+		functions.logger.log("Send data: ", addresses.length)
 		await pubsub.topic("setAddressData").publishJSON({ "data": addresses })
 	})
 
