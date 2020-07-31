@@ -3,10 +3,19 @@ import * as admin from "firebase-admin"
 
 const app = express()
 
-app.get("/v1/address", async (req, res) => {
-	res.set('Cache-Control', 'public, max-age=604800, s-maxage=604800')
-	console.log("[API]", req.query, req.params)
+app.use((req, res, next) => {
+	// Set cors
+	res.header("Access-Control-Allow-Origin", "*")
+	res.header('Access-Control-Allow-Methods', 'GET')
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
 
+	// Set cache
+	res.set('Cache-Control', 'public, max-age=604800, s-maxage=604800')
+	next()
+})
+
+app.get("/v1/address", async (req, res) => {
+	console.log("[API]", req.query)
 	let { code } = req.query
 	if (!code) return res.status(400).send("Invalid request.")
 	code = (code as string).replace(/\-/g, "")
