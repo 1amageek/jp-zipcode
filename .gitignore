@@ -8,6 +8,8 @@ firebase-debug.log*
 
 playground/
 
+functions/lib
+
 # Firebase cache
 .firebase/
 

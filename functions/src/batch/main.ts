@@ -1,6 +1,7 @@
 import * as iconv from "iconv-lite"
 import * as csv from "csvtojson"
 import { getZipCodeData } from "../scripts"
+import { katakana_han2zen } from "../util"
 
 const ZIPCODE_FILE_URL = "https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip"
 
@@ -27,11 +28,11 @@ export default async (callback: (data: Data) => Promise<void>) => {
 				if (typeof line !== "string") return
 				const data = line.split(",").map(value => value.replace(/\"/g, ""))
 				const zipcode = data[2]
-				const state_kana = data[3]
-				const city_kana = data[4]
-				const town_kana = data[5] === "ｲｶﾆｹｲｻｲｶﾞﾅｲﾊﾞｱｲ" ? null : data[5]
-				const state = data[6]
-				const city = data[7]
+				const state_kana = katakana_han2zen(data[3] || "")
+				const city_kana = katakana_han2zen(data[4] || "")
+				const town_kana = data[5] === "ｲｶﾆｹｲｻｲｶﾞﾅｲﾊﾞｱｲ" ? null : katakana_han2zen(data[5] || "")
+				const state = data[6] || ""
+				const city = data[7] || ""
 				const town = data[8] === "以下に掲載がない場合" ? null : data[8]
 				await callback({
 					zipcode,
