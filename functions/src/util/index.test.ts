@@ -9,8 +9,14 @@ describe("Util", () => {
 			"ｱｲｳｴｵ" +
 			"ｶｷｸｹｺ" +
 			"ｻｼｽｾｿ" +
-			"ﾀﾁﾂﾃﾄ"
-		expect(katakana_han2zen(str)).toEqual("アイウエオカキクケコサシスセソタチツテト")
+			"ﾀﾁﾂﾃﾄ" +
+			"ﾅﾆﾇﾈﾉ" +
+			"ﾊﾋﾌﾍﾎ" +
+			"ﾏﾐﾑﾒﾓ" +
+			"ﾔﾕﾖ" +
+			"ﾗﾘﾙﾚﾛ" +
+			"ﾜｦﾝ"
+		expect(katakana_han2zen(str)).toEqual("アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン")
 		console.log(katakana_han2zen(str))
 
 	}, 25000)
