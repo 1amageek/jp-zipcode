@@ -19,12 +19,13 @@ export const monthlyDataUpdate = functions
 			addresses.push(data)
 			if (addresses.length === 500) {
 				functions.logger.log("Send data: ", addresses.length)
-				await pubsub.topic("setAddressData").publishJSON({ "data": addresses })
+				await pubsub.topic("setAddressData")
+					.publishMessage({ json: { "data": addresses } })
 				addresses = []
 			}
 		})
 		functions.logger.log("Send data: ", addresses.length)
-		await pubsub.topic("setAddressData").publishJSON({ "data": addresses })
+		await pubsub.topic("setAddressData").publishMessage({ json: { "data": addresses } })
 	})
 
 export const setAddressData = functions
