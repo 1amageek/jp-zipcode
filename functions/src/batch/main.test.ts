@@ -3,7 +3,7 @@ import main from "./main"
 
 describe("Main", () => {
 
-	test("get data", async (done) => {
+	test("get data", async () => {
 		let addresses: any[] = []
 		await main(async data => {
 			addresses.push(data)
