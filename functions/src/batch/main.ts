@@ -18,6 +18,7 @@ interface Data {
 export default async (callback: (data: Data) => Promise<void>) => {
 	const file = await getZipCodeData(ZIPCODE_FILE_URL)
 	const decoded = iconv.decode(file.data, "shiftjis")
+	let previousZipCode: string
 	return new Promise<void>((resolve, reject) => {
 		csv({
 			noheader: true,
@@ -28,12 +29,14 @@ export default async (callback: (data: Data) => Promise<void>) => {
 				if (typeof line !== "string") return
 				const data = line.split(",").map(value => value.replace(/\"/g, ""))
 				const zipcode = data[2]
+				if (previousZipCode === zipcode) return
+				previousZipCode = zipcode
 				const state_kana = katakana_han2zen(data[3] || "")
 				const city_kana = katakana_han2zen(data[4] || "")
-				const town_kana = data[5] === "ｲｶﾆｹｲｻｲｶﾞﾅｲﾊﾞｱｲ" ? null : katakana_han2zen(data[5] || "")
+				const town_kana = cleanTown(data[5] === "ｲｶﾆｹｲｻｲｶﾞﾅｲﾊﾞｱｲ" ? null : katakana_han2zen(data[5] || ""))
 				const state = data[6] || ""
 				const city = data[7] || ""
-				const town = data[8] === "以下に掲載がない場合" ? null : data[8]
+				const town = cleanTown(data[8] === "以下に掲載がない場合" ? null : data[8])
 				await callback({
 					zipcode,
 					state_kana,
@@ -48,4 +51,12 @@ export default async (callback: (data: Data) => Promise<void>) => {
 				resolve()
 			})
 	})
+}
+
+const cleanTown = (data: string | null) => {
+	if (!data) { return data }
+	if (data.length === 0) { return data }
+	return data
+		.replace(/\(.+/gi, "")
+		.replace(/（.+/gi, "")
 }

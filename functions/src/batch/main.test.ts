@@ -1,6 +1,5 @@
 import main from "./main"
 
-
 describe("Main", () => {
 
 	test("get data", async () => {
@@ -13,6 +12,5 @@ describe("Main", () => {
 			}
 		})
 		console.log(addresses.length)
-	}, 25000)
-
+	}, 10000)
 })
